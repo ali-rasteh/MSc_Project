@@ -41,15 +41,16 @@
 
 *************************************	parameters definition	********************************************
 .param VDD = 0.4
-.param VDD_enhanced = 0.69
+.param VDD_enhanced = 0.65			* for VDD = 0.4
+*.param VDD_enhanced = 0.69			* for VDD = 0.45
 .param VDD_nominal = 1.1
 .param Write_value = 0.0
 
-.param T_clk=3000n
+.param T_clk=500n
 .param T_simulation=14*T_clk
 .param step_simulation=T_clk/500
 .param T_sampling=0.9*T_simulation
-.param MC_num=150
+.param MC_num=10
 .param total_flag=0
 .param total_flag_NV=1				* total_flag nonvariation
 .param global_flag=1
@@ -229,6 +230,13 @@ x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchfl
 
 *******************************************************************
 
+.subckt NOT_NV VDD GROND IN OUT
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*NMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'		*PMOS
+.ends
+
+*******************************************************************
+
 .subckt NOT_large_size VDD GROND IN OUT
 x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='30*Wmin'	l='Lmin'	*NMOS
 x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='30*Wmin'	l='Lmin'		*PMOS
@@ -238,14 +246,28 @@ x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchfl
 
 .subckt NOT_VM_high VDD GROND IN OUT
 x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*NMOS
-x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'		*PMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='150*Wmin'	l='Lmin'		*PMOS
+.ends
+
+*******************************************************************
+
+.subckt NOT_VM_high_NV VDD GROND IN OUT
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*NMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='150*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
 
 .subckt NOT_VM_low VDD GROND IN OUT
-x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='30*Wmin'	l='Lmin'	*NMOS
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='Lmin'	*NMOS
 x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'		*PMOS
+.ends
+
+*******************************************************************
+
+.subckt NOT_VM_low_NV VDD GROND IN OUT
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='Lmin'	*NMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
@@ -667,9 +689,9 @@ xNOT2_timing	VDD_nod	GND	RWB_gated#	RWB_gated	NOT
 *xNOT3_timing	VDD_nod	GND	RESET_gated	RESET_gated#	NOT
 xFE_SR_latch1_timing	VDD_nod	GND	START	RESET	dummy_WL	FE_SR_latch_2
 
-xNOT4_timing	VDD_nod	GND	dummy_BL	dummy_BL#1	NOT_VM_high
-xNOT5_timing	VDD_nod	GND	dummy_BL#1	dummy_BL1	NOT
-xNOT6_timing	VDD_nod	GND	dummy_BL1	RESET		NOT
+xNOT4_timing	VDD_nod	GND	dummy_BL	dummy_BL#1	NOT_VM_high_NV
+xNOT5_timing	VDD_nod	GND	dummy_BL#1	dummy_BL1	NOT_VM_low_NV
+xNOT6_timing	VDD_nod	GND	dummy_BL1	RESET		NOT_NV
 
 *xNOT7_timing	VDD_nod	GND	dummy_WL	dummy_WL_delay_1	NOT_delay
 *xNOT8_timing	VDD_nod	GND	dummy_WL_delay_1	dummy_WL_delay	NOT_delay
