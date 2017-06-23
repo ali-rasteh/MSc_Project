@@ -47,10 +47,10 @@
 .param Write_value = 0.0
 
 .param T_clk=500n
-.param T_simulation=15*T_clk
+.param T_simulation='(7+nref)*T_clk'
 .param step_simulation=T_clk/500
 .param T_sampling=0.9*T_simulation
-.param MC_num=20
+.param MC_num=50
 .param total_flag=0
 .param total_flag_NV=1				* total_flag nonvariation
 .param global_flag=1
@@ -84,19 +84,22 @@
 
 
 
-.param I_leak_excess_write_120				='(2*nint-2)*I_leak_1cell_120'
+.param I_leak_excess_write_double_120		='(2*nint-2)*I_leak_1cell_120'
+.param I_leak_excess_write_single_120		='(nint-1)*I_leak_1cell_120'
 .param I_BLB_leak_comp_120					='n_sink*I_leak_1cell_120'
 .param I_dummy_leak_120						='nt*I_leak_1cell_120'
 .param I_leak_precision_120					='0.5*n_sink*I_leak_1cell_120'
 .param I_leak_BL_120						='N0*I_leak_1cell_120'
 .param I_leak_BLB_120						='(nt-N0)*I_leak_1cell_120'
 
-.param I_leak_excess_write_120_gauss		=agauss(I_leak_excess_write_120,	'0.49*0.05*nt*I_leak_1cell_120',	1)
-.param I_BLB_leak_comp_120_gauss			=agauss(I_BLB_leak_comp_120, 		'0.42*0.05*nt*I_leak_1cell_120',	1)
-.param I_dummy_leak_120_gauss				=agauss(I_dummy_leak_120, 			'1.00*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_precision_120_gauss			=agauss(I_leak_precision_120, 		'0.30*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BL_120_gauss					=agauss(I_leak_BL_120, 				'0.31*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BLB_120_gauss					=agauss(I_leak_BLB_120, 			'0.95*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_excess_write_double_120_gauss		=agauss(I_leak_excess_write_double_120,	'0.49*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BL_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'0.35*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BLB_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'0.35*0.05*nt*I_leak_1cell_120',	1)
+.param I_BLB_leak_comp_120_gauss				=agauss(I_BLB_leak_comp_120, 		'0.42*0.05*nt*I_leak_1cell_120',	1)
+.param I_dummy_leak_120_gauss					=agauss(I_dummy_leak_120, 			'1.00*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_precision_120_gauss				=agauss(I_leak_precision_120, 		'0.30*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BL_120_gauss						=agauss(I_leak_BL_120, 				'0.31*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BLB_120_gauss						=agauss(I_leak_BLB_120, 			'0.95*0.05*nt*I_leak_1cell_120',	1)
 
 
 
@@ -630,12 +633,13 @@ V_VDD_nominal	VDD_nominal_nod	GND	dc VDD_nominal
 V_CLK CLK GND PULSE	0	VDD	'1*T_clk'		1p	1p	'0.5*T_clk'	'T_clk'
 V_CS CS GND PULSE	0	VDD	'0.025*T_clk'	1p	1p	'T_simulation'	'T_simulation+T_clk'
 *V_RWB RWB GND PULSE	VDD	0	'0.75*T_clk'	1p	1p	'T_clk'		'2*T_clk'
-V_RWB RWB GND PULSE	VDD	0	'11.75*T_clk'	1p	1p	'T_clk'	'T_simulation'
-V_GR GR GND PULSE	0	VDD	'0.5*T_clk'	1p	1p	'0.5*T_clk'		'T_simulation'
+V_RWB RWB GND PULSE	VDD	0	'(nref+3.75)*T_clk'	1p	1p	'T_clk'	'T_simulation'
+V_GR GR GND PULSE	0	VDD	'0.25*T_clk'	1p	1p	'0.5*T_clk'		'T_simulation'
+V_LCP_excess_write	LCP_excess_write	GND PULSE	0	VDD	'(nref+6)*T_clk'	1p	1p	'T_clk'		'T_simulation'
 V_Write write GND PULSE	VDD	0	'T_simulation'	1p	1p	'T_clk'		'T_simulation'
 
 V_dummy_WE dummy_WE GND dc 0
-V_write_counter5#	write_counter5#	GND	PULSE	VDD	0	'2.75*T_clk'		1p	1p	'T_simulation'	'T_simulation+T_clk'
+V_write_counter5#	write_counter5#	GND	PULSE	VDD	0	'2.5*T_clk'		1p	1p	'T_simulation'	'T_simulation+T_clk'
 V_A0	A0	GND		dc	VDD
 V_A1	A1	GND		dc	VDD
 V_A2	A2	GND		dc	0
@@ -748,8 +752,11 @@ xFE_RER_DFF9_leak		VDD_nod	GND	LCP_7	START_LCA	LCA_GR			LCP_8	not_connect9_leak	
 * xFE_RER_DFF11_leak	VDD_nod	GND	LCP_9	START_LCA	LCA_GR			LCP_10	not_connect11_leak	FE_RER_DFF_3
 * xFE_RER_DFF12_leak	VDD_nod	GND	LCP_10	START_LCA	LCA_GR			LCP_11	not_connect12_leak	FE_RER_DFF_3
 * xFE_RER_DFF13_leak	VDD_nod	GND	LCP_11	START_LCA	LCA_GR			LCP_12	not_connect13_leak	FE_RER_DFF_3
-xFE_SR_latch3_leak	VDD_nod	GND	LCA		LCA_GR			PRE_LCP_excess_write	FE_SR_latch_2
-xFE_RER_DFF15_leak	VDD_nod	GND	PRE_LCP_excess_write	START	LCA_GR		LCP_excess_write	not_connect14_leak	FE_RER_DFF_3
+* xFE_SR_latch3_leak	VDD_nod	GND	LCA		LCA_GR			PRE_LCP_excess_write_1	FE_SR_latch_2
+* xFE_RER_DFF14_leak	VDD_nod	GND	PRE_LCP_excess_write_1	START	LCA_GR		PRE_LCP_excess_write_2	not_connect14_leak	FE_RER_DFF_3
+* xFE_RER_DFF15_leak	VDD_nod	GND	PRE_LCP_excess_write_2	START	LCA_GR		PRE_LCP_excess_write_3	not_connect15_leak	FE_RER_DFF_3
+* xFE_RER_DFF16_leak	VDD_nod	GND	PRE_LCP_excess_write_3	START	LCA_GR		PRE_LCP_excess_write_4	not_connect16_leak	FE_RER_DFF_3
+* xFE_RER_DFF17_leak	VDD_nod	GND	PRE_LCP_excess_write_4	START	LCA_GR		LCP_excess_write	not_connect17_leak	FE_RER_DFF_3
 
 
 
@@ -823,10 +830,10 @@ xNOT35_leak	VDD_nod	GND	BLB_leakage_compensation_gated_8#	BLB_leakage_compensati
 * xNAND21_leak	VDD_nod	GND	BL_leakage_greater#	LCP_12	RWB	BLB_leakage_compensation_gated_12#	NAND3
 * xNOT43_leak	VDD_nod	GND	BLB_leakage_compensation_gated_12#	BLB_leakage_compensation_gated_12	NOT
 
-xNOT42_leak	VDD_nod	GND	LCP_excess_write	LCP_excess_write#	NOT
-xNOR19_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write#	BL_excess_write_leakage_gated	NOR2
-xNAND22_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write	BLB_excess_write_leakage_gated#	NAND2
-xNOT43_leak	VDD_nod	GND	BLB_excess_write_leakage_gated#	BLB_excess_write_leakage_gated	NOT
+* xNOT42_leak	VDD_nod	GND	LCP_excess_write	LCP_excess_write#	NOT
+* xNOR19_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write#	BL_excess_write_leakage_gated	NOR2
+* xNAND22_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write	BLB_excess_write_leakage_gated#	NAND2
+* xNOT43_leak	VDD_nod	GND	BLB_excess_write_leakage_gated#	BLB_excess_write_leakage_gated	NOT
 
 
 * x1_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
@@ -888,9 +895,9 @@ x8_BLB_leakage	BLB	BL_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac tot
 * x12_BLB_leakage	BLB	BL_leakage_compensation_gated_12		D_M12_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
 
 
-x1_BL_excess_write_leakage	CS_nod_excess_write_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
-x2_BL_excess_write_leakage	D_M_excess_write_leakage_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
-x_BL_excess_write_leakage		BL	BLB_excess_write_leakage_gated		D_M_excess_write_leakage_BL	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+* x1_BL_excess_write_leakage	CS_nod_excess_write_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
+* x2_BL_excess_write_leakage	D_M_excess_write_leakage_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+* x_BL_excess_write_leakage		BL	BLB_excess_write_leakage_gated		D_M_excess_write_leakage_BL	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
 
 
 * x1_BLB_excess_write_leakage	CS_nod_excess_write_BLB		CS_nod_excess_write_BLB		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
@@ -904,7 +911,8 @@ V_leak_comp_0v CS_dummy_leak CS_dummy_leak_0v dc 0
 *I_leak_comp			CS_dummy_leak 	GND		0
 
 x1_dummy_leak	CS_dummy_leak	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='10*Lmin'
-x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='17*Wmin'	l='10*Lmin'
+* x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='17*Wmin'	l='10*Lmin'
+x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='14*Wmin'	l='10*Lmin'
 V_dummy_leak_0v out1_dummy_leak out1_dummy_leak_0v dc 0
 x3_dummy_leak	out1_dummy_leak	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x4_dummy_leak	D_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
@@ -912,12 +920,12 @@ x3_dummy_leak	out1_dummy_leak	out1_dummy_leak	GND	GND	nch_mac totalflag=total_fl
 * x6_dummy_leak	CS_nod	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 
 *Fcccs_excess_write_leak	VDD_nod	CS_nod_excess_write_BL		V_BL_leak	'2*nint-2'
-I_excess_write_leak	VDD_nod	CS_nod_excess_write_BL		I_leak_excess_write_120_gauss
+*I_excess_write_leak	VDD_nod	CS_nod_excess_write_BL		I_leak_excess_write_double_120_gauss
 *Fcccs_precision_leak	VDD_nod	CS_nod_excess_write_BL		V_BL_leak	'0.5*n_sink'
 *I_precision_leak	VDD_nod	CS_nod_excess_write_BL		I_leak_precision_120_gauss
 
 *Fcccs_excess_write_leak	VDD_nod	CS_nod_excess_write_BLB		V_BL_leak	'2*nint-2'
-*I_excess_write_leak	VDD_nod	CS_nod_excess_write_BLB		I_leak_excess_write_120_gauss
+*I_excess_write_leak	VDD_nod	CS_nod_excess_write_BLB		I_leak_excess_write_double_120_gauss
 *Fcccs_precision_leak	VDD_nod	CS_nod_excess_write_BLB		V_BL_leak	'0.5*n_sink'
 *I_precision_leak	VDD_nod	CS_nod_excess_write_BLB		I_leak_precision_120_gauss
 
@@ -945,8 +953,10 @@ C2_dummy	dummy_BLB	GND	'0.3*C_BL'
 C1_leak_dummy	leak_dummy_BL	GND		C_BL
 C2_leak_dummy	leak_dummy_BLB	GND		C_BL
 
-I_leak_BL		BL		GND	dc			I_leak_BL_120_gauss
-I_leak_BLB		BLB		GND	dc			I_leak_BLB_120_gauss
+* I_leak_BL		BL		GND	dc			I_leak_BL_120_gauss
+* I_leak_BLB	BLB		GND	dc			I_leak_BLB_120_gauss
+I_leak_BL	BL	GND	PULSE	I_leak_BL_120_gauss		'I_leak_BL_120_gauss+I_leak_BL_excess_write_single_120_gauss'	'(nref+6)*T_clk'	1p	1p	'T_clk'		'T_simulation'
+I_leak_BLB	BLB	GND	PULSE	I_leak_BLB_120_gauss	'I_leak_BLB_120_gauss-I_leak_BLB_excess_write_single_120_gauss'	'(nref+6)*T_clk'	1p	1p	'T_clk'		'T_simulation'
 *Fcccs_leak_BL	BL		GND	V_BL_leak	N0
 *Fcccs_leak_BLB	BLB		GND	V_BL_leak	'nt-N0'
 
@@ -990,7 +1000,8 @@ I_leak_BLB		BLB		GND	dc			I_leak_BLB_120_gauss
 + V(PRE_LCA)	VDD		V(LCA)	0	V(LCP_1)	0	V(LCP_2)	0	V(LCP_3)	0	V(LCP_4)	0	V(LCP_5)	0	V(LCP_6)	0
 + V(LCP_7)	0	V(LCP_8)	0	V(LCP_9)	0	V(LCP_10)	0	V(LCP_11)	0	V(LCP_12)	0	V(LCP_RESET)	VDD		V(LCR)	0
 + V(leakage_compare_CLK)	VDD	V(current_compare_CLK)	VDD	V(BL_leakage_greater#)	VDD	V(current_compare_output)	VDD
-+ V(PRE_LCP_excess_write)	0	V(LCP_excess_write)	0
++ V(PRE_LCP_excess_write_1)	0	V(PRE_LCP_excess_write_2)	0	V(PRE_LCP_excess_write_3)	0	V(PRE_LCP_excess_write_4)	0
+* + V(LCP_excess_write)	0
 
 .TRAN	STEP=step_simulation	STOP=T_simulation	START=0n	 UIC SWEEP MONTE=MC_num
 ***********************************	end of simulation	**********************************************
