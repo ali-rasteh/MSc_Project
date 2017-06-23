@@ -892,6 +892,7 @@ x1_BL_excess_write_leakage	CS_nod_excess_write_BL		CS_nod_excess_write_BL		GND		
 x2_BL_excess_write_leakage	D_M_excess_write_leakage_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
 x_BL_excess_write_leakage		BL	BLB_excess_write_leakage_gated		D_M_excess_write_leakage_BL	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
 
+
 * x1_BLB_excess_write_leakage	CS_nod_excess_write_BLB		CS_nod_excess_write_BLB		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
 * x2_BLB_excess_write_leakage	D_M_excess_write_leakage_BLB		CS_nod_excess_write_BLB		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
 * x_BLB_excess_write_leakage	BLB	BL_excess_write_leakage_gated		D_M_excess_write_leakage_BLB	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
