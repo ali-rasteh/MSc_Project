@@ -47,10 +47,10 @@
 .param Write_value = 0.0
 
 .param T_clk=500n
-.param T_simulation=14*T_clk
+.param T_simulation=15*T_clk
 .param step_simulation=T_clk/500
 .param T_sampling=0.9*T_simulation
-.param MC_num=10
+.param MC_num=20
 .param total_flag=0
 .param total_flag_NV=1				* total_flag nonvariation
 .param global_flag=1
@@ -62,7 +62,7 @@
 .param n_compensation_max=1500
 .param n_sink=n_compensation_max/(nref-1)
 
-.param N0=0
+.param N0=200
 .param nr=768
 
 
@@ -203,14 +203,14 @@ xNOT3 VDD GROND	OUT+	OUT#	NOT
 *******************************************************************
 
 .subckt	write_driver	VDD GROND BL	BLB	WE	DATA_IN
-x1-1	DATA_INB	DATA_IN	VDD VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='Lmin'
-x2-1	DATA_INB	DATA_IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='Lmin'
+x1-1	DATA_INB	DATA_IN	VDD VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
+x2-1	DATA_INB	DATA_IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
 
-x1-2	DATA_INBB	DATA_INB	VDD VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='Lmin'
-x2-2	DATA_INBB	DATA_INB	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='Lmin'
+x1-2	DATA_INBB	DATA_INB	VDD VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
+x2-2	DATA_INBB	DATA_INB	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
 
-x-PG1	BLB	WE	DATA_INB GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='Lmin'
-x-PG2	BL	WE	DATA_INBB GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='Lmin'
+x-PG1	BLB	WE	DATA_INB GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
+x-PG2	BL	WE	DATA_INBB GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'
 .ends
 
 *******************************************************************
@@ -246,27 +246,27 @@ x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchfl
 
 .subckt NOT_VM_high VDD GROND IN OUT
 x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*NMOS
-x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='150*Wmin'	l='Lmin'		*PMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='50*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
 
 .subckt NOT_VM_high_NV VDD GROND IN OUT
 x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*NMOS
-x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='150*Wmin'	l='Lmin'		*PMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='50*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
 
 .subckt NOT_VM_low VDD GROND IN OUT
-x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='Lmin'	*NMOS
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='50*Wmin'	l='Lmin'	*NMOS
 x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
 
 .subckt NOT_VM_low_NV VDD GROND IN OUT
-x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='Lmin'	*NMOS
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='50*Wmin'	l='Lmin'	*NMOS
 x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'		*PMOS
 .ends
 
@@ -630,9 +630,10 @@ V_VDD_nominal	VDD_nominal_nod	GND	dc VDD_nominal
 V_CLK CLK GND PULSE	0	VDD	'1*T_clk'		1p	1p	'0.5*T_clk'	'T_clk'
 V_CS CS GND PULSE	0	VDD	'0.025*T_clk'	1p	1p	'T_simulation'	'T_simulation+T_clk'
 *V_RWB RWB GND PULSE	VDD	0	'0.75*T_clk'	1p	1p	'T_clk'		'2*T_clk'
-V_RWB RWB GND PULSE	0	VDD	'0.025*T_clk'	1p	1p	'T_simulation'	'T_simulation+T_clk'
+V_RWB RWB GND PULSE	VDD	0	'11.75*T_clk'	1p	1p	'T_clk'	'T_simulation'
 V_GR GR GND PULSE	0	VDD	'0.5*T_clk'	1p	1p	'0.5*T_clk'		'T_simulation'
-V_Write write GND dc 0
+V_Write write GND PULSE	VDD	0	'T_simulation'	1p	1p	'T_clk'		'T_simulation'
+
 V_dummy_WE dummy_WE GND dc 0
 V_write_counter5#	write_counter5#	GND	PULSE	VDD	0	'2.75*T_clk'		1p	1p	'T_simulation'	'T_simulation+T_clk'
 V_A0	A0	GND		dc	VDD
@@ -689,23 +690,24 @@ xNOT2_timing	VDD_nod	GND	RWB_gated#	RWB_gated	NOT
 *xNOT3_timing	VDD_nod	GND	RESET_gated	RESET_gated#	NOT
 xFE_SR_latch1_timing	VDD_nod	GND	START	RESET	dummy_WL	FE_SR_latch_2
 
-xNOT4_timing	VDD_nod	GND	dummy_BL	dummy_BL#1	NOT_VM_high_NV
-xNOT5_timing	VDD_nod	GND	dummy_BL#1	dummy_BL1	NOT_VM_low_NV
+xNOT4_timing	VDD_nod	GND	dummy_BL	dummy_BL#1	NOT_NV
+xNOT5_timing	VDD_nod	GND	dummy_BL#1	dummy_BL1	NOT_NV
 xNOT6_timing	VDD_nod	GND	dummy_BL1	RESET		NOT_NV
 
 *xNOT7_timing	VDD_nod	GND	dummy_WL	dummy_WL_delay_1	NOT_delay
 *xNOT8_timing	VDD_nod	GND	dummy_WL_delay_1	dummy_WL_delay	NOT_delay
-xNOT9_timing	VDD_nod	GND	RWB	RWB#	NOT_delay
-xNOR4_timing	VDD_nod	GND	RWB#	SE	SA_flag	NOR2
+xNOT9_timing	VDD_nod	GND	RWB	RWB#	NOT
+xNOT10_timing	VDD_nod	GND	RWB	RWB#_delayed	NOT_delay
+xNOR4_timing	VDD_nod	GND	RWB#_delayed	SE	SA_flag	NOR2
 xNOR5_timing	VDD_nod	GND	dummy_WL	SA_flag	PCB	NOR2
-xNOT10_timing	VDD_nod	GND	PCB	PCB#	NOT
+xNOT11_timing	VDD_nod	GND	PCB	PCB#	NOT
 
 x1_row_decoder_timing	d1_row_decoder	A3	VDD_nod		VDD_nod	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='7.7*Wmin'	l='Lmin'
 x2_row_decoder_timing	d2_row_decoder	A2	VDD_nod		VDD_nod	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='7.7*Wmin'	l='Lmin'
 xNAND1_timing	VDD_nod	GND	d1_row_decoder	d2_row_decoder	row_address_enable	NAND2
 *xNOR6_timing	VDD_nod	GND	dummy_WL#	LCP_1	LCP_2	LCP_3	row_address_enable	WL	NOR5
 xNOR6_timing	VDD_nod	GND	dummy_WL#	LCA		row_address_enable	WL	NOR3
-xNOT11_timing	VDD_nod	GND	dummy_WL	dummy_WL#	NOT
+xNOT12_timing	VDD_nod	GND	dummy_WL	dummy_WL#	NOT
 
 **************************************	leakage compensation circuit
 
@@ -725,10 +727,16 @@ xNOT1_GR_leak	VDD_nod	GND	LCA_GR#	LCA_GR	NOT
 xNOR2_GR_leak	VDD_nod	GND	LCP_RESET	GR	LCP_RESET_GR#	NOR2
 xNOT2_GR_leak	VDD_nod	GND	LCP_RESET_GR#	LCP_RESET_GR	NOT
 
-xNAND1_leak	VDD_nod	GND	START	LCA	START_LCA#	NAND2
-xNOT3_leak	VDD_nod	GND	START_LCA#	START_LCA	NOT
+xNOT3_leak	VDD_nod	GND	START	START#	NOT
+xNAND1_leak	VDD_nod	GND	START#	LCA	START_LCA	NAND2
+
+xFE_SR_latch2_leak	VDD_nod	GND	LCA		LCA_GR	LCA_down_flag	FE_SR_latch_2
+xNOT4_leak	VDD_nod	GND	LCA_down_flag	LCA_down_flag#	NOT
+xNAND2_leak	VDD_nod	GND	START	LCA		START_LCA_first#	NAND2
+xNAND3_leak	VDD_nod	GND	LCA_down_flag#	START_LCA_first#	START_LCA_first_gated	NAND2
+
 xFE_RER_DFF1_leak		VDD_nod	GND	PRE_LCA		START	LCP_RESET_GR	LCA		not_connect1_leak	FE_RER_DFF_3
-xFE_RER_DFF2_leak		VDD_nod	GND	LCA		START_LCA	LCA_GR			LCP_1	not_connect2_leak	FE_RER_DFF_3
+xFE_RER_DFF2_leak		VDD_nod	GND	LCA		START_LCA_first_gated	LCA_GR			LCP_1	not_connect2_leak	FE_RER_DFF_3
 xFE_RER_DFF3_leak		VDD_nod	GND	LCP_1	START_LCA	LCA_GR			LCP_2	not_connect3_leak	FE_RER_DFF_3
 xFE_RER_DFF4_leak		VDD_nod	GND	LCP_2	START_LCA	LCA_GR			LCP_3	not_connect4_leak	FE_RER_DFF_3
 xFE_RER_DFF5_leak		VDD_nod	GND	LCP_3	START_LCA	LCA_GR			LCP_4	not_connect5_leak	FE_RER_DFF_3
@@ -740,18 +748,18 @@ xFE_RER_DFF9_leak		VDD_nod	GND	LCP_7	START_LCA	LCA_GR			LCP_8	not_connect9_leak	
 * xFE_RER_DFF11_leak	VDD_nod	GND	LCP_9	START_LCA	LCA_GR			LCP_10	not_connect11_leak	FE_RER_DFF_3
 * xFE_RER_DFF12_leak	VDD_nod	GND	LCP_10	START_LCA	LCA_GR			LCP_11	not_connect12_leak	FE_RER_DFF_3
 * xFE_RER_DFF13_leak	VDD_nod	GND	LCP_11	START_LCA	LCA_GR			LCP_12	not_connect13_leak	FE_RER_DFF_3
-xFE_RER_DFF14_leak	VDD_nod	GND	LCA		LCA_GR			PRE_LCP_excess_write	FE_SR_latch_2
+xFE_SR_latch3_leak	VDD_nod	GND	LCA		LCA_GR			PRE_LCP_excess_write	FE_SR_latch_2
 xFE_RER_DFF15_leak	VDD_nod	GND	PRE_LCP_excess_write	START	LCA_GR		LCP_excess_write	not_connect14_leak	FE_RER_DFF_3
 
 
 
-xNOT4_leak	VDD_nod	GND	SE	SE#1	NOT_delay
-xNOT5_leak	VDD_nod	GND	SE	SE#		NOT
-xNOT6_leak	VDD_nod	GND	SE#1	SE1	NOT_delay
-xNOT7_leak	VDD_nod	GND	SE1		SE#2	NOT_delay
-xNOT8_leak	VDD_nod	GND	SE#2	SE2	NOT_delay
-xNOT9_leak	VDD_nod	GND	SE2	SE#_delayed	NOT_delay
-xNOT10_leak	VDD_nod	GND	LCA	LCA#	NOT
+xNOT6_leak	VDD_nod	GND	SE	SE#1	NOT_delay
+xNOT7_leak	VDD_nod	GND	SE	SE#		NOT
+xNOT8_leak	VDD_nod	GND	SE#1	SE1	NOT_delay
+xNOT9_leak	VDD_nod	GND	SE1		SE#2	NOT_delay
+xNOT10_leak	VDD_nod	GND	SE#2	SE2	NOT_delay
+xNOT11_leak	VDD_nod	GND	SE2	SE#_delayed	NOT_delay
+xNOT12_leak	VDD_nod	GND	LCA	LCA#	NOT
 xNOR4_leak	VDD_nod	GND	SE#_delayed	SE#		LCA#	LCP_1	leakage_compare_CLK	NOR4
 xNOR5_leak	VDD_nod	GND	SE#_delayed	SE#		LCA#	current_compare_CLK	NOR3
 xRE_DFF1_leak	VDD_nod GND	output	leakage_compare_CLK		GND	BL_leakage_greater#	RE_DFF
@@ -759,65 +767,65 @@ xRE_DFF2_leak	VDD_nod GND	output	current_compare_CLK		GND	current_compare_output
 
 
 xXOR1_leak	VDD_nod	GND	current_compare_output	BL_leakage_greater#	LCR	XOR2
-xNAND2_leak	VDD_nod	GND	LCR	LCP_1	LCR_gated#	NAND2
-xNOT11_leak	VDD_nod	GND	LCR_gated#	LCR_gated	NOT
+xNAND4_leak	VDD_nod	GND	LCR	LCP_1	LCR_gated#	NAND2
+xNOT13_leak	VDD_nod	GND	LCR_gated#	LCR_gated	NOT
 xNOR6_leak	VDD_nod	GND	LCR_gated	LCP_8	LCP_RESET#	NOR2
-xNOT12_leak	VDD_nod	GND	LCP_RESET#	LCP_RESET	NOT
+xNOT14_leak	VDD_nod	GND	LCP_RESET#	LCP_RESET	NOT
 
 
 
 xNOT20_leak	VDD_nod	GND	LCP_1	LCP_1#	NOT
-xNOR7_leak	VDD_nod	GND	BL_leakage_greater#	LCP_1#	BL_leakage_compensation_gated_1	NOR2
-xNAND3_leak	VDD_nod	GND	BL_leakage_greater#	LCP_1	BLB_leakage_compensation_gated_1#	NAND2
+xNOR7_leak	VDD_nod	GND	BL_leakage_greater#	LCP_1#	RWB#	BL_leakage_compensation_gated_1	NOR3
+xNAND10_leak	VDD_nod	GND	BL_leakage_greater#	LCP_1	RWB	BLB_leakage_compensation_gated_1#	NAND3
 xNOT21_leak	VDD_nod	GND	BLB_leakage_compensation_gated_1#	BLB_leakage_compensation_gated_1	NOT
 xNOT22_leak	VDD_nod	GND	LCP_2	LCP_2#	NOT
-xNOR8_leak	VDD_nod	GND	BL_leakage_greater#	LCP_2#	BL_leakage_compensation_gated_2	NOR2
-xNAND4_leak	VDD_nod	GND	BL_leakage_greater#	LCP_2	BLB_leakage_compensation_gated_2#	NAND2
+xNOR8_leak	VDD_nod	GND	BL_leakage_greater#	LCP_2#	RWB#	BL_leakage_compensation_gated_2	NOR3
+xNAND11_leak	VDD_nod	GND	BL_leakage_greater#	LCP_2	RWB	BLB_leakage_compensation_gated_2#	NAND3
 xNOT23_leak	VDD_nod	GND	BLB_leakage_compensation_gated_2#	BLB_leakage_compensation_gated_2	NOT
 xNOT24_leak	VDD_nod	GND	LCP_3	LCP_3#	NOT
-xNOR9_leak	VDD_nod	GND	BL_leakage_greater#	LCP_3#	BL_leakage_compensation_gated_3	NOR2
-xNAND5_leak	VDD_nod	GND	BL_leakage_greater#	LCP_3	BLB_leakage_compensation_gated_3#	NAND2
+xNOR9_leak	VDD_nod	GND	BL_leakage_greater#	LCP_3#	RWB#	BL_leakage_compensation_gated_3	NOR3
+xNAND12_leak	VDD_nod	GND	BL_leakage_greater#	LCP_3	RWB	BLB_leakage_compensation_gated_3#	NAND3
 xNOT25_leak	VDD_nod	GND	BLB_leakage_compensation_gated_3#	BLB_leakage_compensation_gated_3	NOT
 xNOT26_leak	VDD_nod	GND	LCP_4	LCP_4#	NOT
-xNOR10_leak	VDD_nod	GND	BL_leakage_greater#	LCP_4#	BL_leakage_compensation_gated_4	NOR2
-xNAND6_leak	VDD_nod	GND	BL_leakage_greater#	LCP_4	BLB_leakage_compensation_gated_4#	NAND2
+xNOR10_leak	VDD_nod	GND	BL_leakage_greater#	LCP_4#	RWB#	BL_leakage_compensation_gated_4	NOR3
+xNAND13_leak	VDD_nod	GND	BL_leakage_greater#	LCP_4	RWB	BLB_leakage_compensation_gated_4#	NAND3
 xNOT27_leak	VDD_nod	GND	BLB_leakage_compensation_gated_4#	BLB_leakage_compensation_gated_4	NOT
 xNOT28_leak	VDD_nod	GND	LCP_5	LCP_5#	NOT
-xNOR11_leak	VDD_nod	GND	BL_leakage_greater#	LCP_5#	BL_leakage_compensation_gated_5	NOR2
-xNAND7_leak	VDD_nod	GND	BL_leakage_greater#	LCP_5	BLB_leakage_compensation_gated_5#	NAND2
+xNOR11_leak	VDD_nod	GND	BL_leakage_greater#	LCP_5#	RWB#	BL_leakage_compensation_gated_5	NOR3
+xNAND14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_5	RWB	BLB_leakage_compensation_gated_5#	NAND3
 xNOT29_leak	VDD_nod	GND	BLB_leakage_compensation_gated_5#	BLB_leakage_compensation_gated_5	NOT
 xNOT30_leak	VDD_nod	GND	LCP_6	LCP_6#	NOT
-xNOR12_leak	VDD_nod	GND	BL_leakage_greater#	LCP_6#	BL_leakage_compensation_gated_6	NOR2
-xNAND8_leak	VDD_nod	GND	BL_leakage_greater#	LCP_6	BLB_leakage_compensation_gated_6#	NAND2
+xNOR12_leak	VDD_nod	GND	BL_leakage_greater#	LCP_6#	RWB#	BL_leakage_compensation_gated_6	NOR3
+xNAND15_leak	VDD_nod	GND	BL_leakage_greater#	LCP_6	RWB	BLB_leakage_compensation_gated_6#	NAND3
 xNOT31_leak	VDD_nod	GND	BLB_leakage_compensation_gated_6#	BLB_leakage_compensation_gated_6	NOT
 xNOT32_leak	VDD_nod	GND	LCP_7	LCP_7#	NOT
-xNOR13_leak	VDD_nod	GND	BL_leakage_greater#	LCP_7#	BL_leakage_compensation_gated_7	NOR2
-xNAND9_leak	VDD_nod	GND	BL_leakage_greater#	LCP_7	BLB_leakage_compensation_gated_7#	NAND2
+xNOR13_leak	VDD_nod	GND	BL_leakage_greater#	LCP_7#	RWB#	BL_leakage_compensation_gated_7	NOR3
+xNAND16_leak	VDD_nod	GND	BL_leakage_greater#	LCP_7	RWB	BLB_leakage_compensation_gated_7#	NAND3
 xNOT33_leak	VDD_nod	GND	BLB_leakage_compensation_gated_7#	BLB_leakage_compensation_gated_7	NOT
 xNOT34_leak	VDD_nod	GND	LCP_8	LCP_8#	NOT
-xNOR14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8#	BL_leakage_compensation_gated_8	NOR2
-xNAND10_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8	BLB_leakage_compensation_gated_8#	NAND2
+xNOR14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8#	RWB#	BL_leakage_compensation_gated_8	NOR3
+xNAND17_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8	RWB	BLB_leakage_compensation_gated_8#	NAND3
 xNOT35_leak	VDD_nod	GND	BLB_leakage_compensation_gated_8#	BLB_leakage_compensation_gated_8	NOT
 * xNOT36_leak	VDD_nod	GND	LCP_9	LCP_9#	NOT
-* xNOR15_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9#	BL_leakage_compensation_gated_9	NOR2
-* xNAND11_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9	BLB_leakage_compensation_gated_9#	NAND2
+* xNOR15_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9#	RWB#	BL_leakage_compensation_gated_9	NOR3
+* xNAND18_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9	RWB	BLB_leakage_compensation_gated_9#	NAND3
 * xNOT37_leak	VDD_nod	GND	BLB_leakage_compensation_gated_9#	BLB_leakage_compensation_gated_9	NOT
 * xNOT38_leak	VDD_nod	GND	LCP_10	LCP_10#	NOT
-* xNOR16_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10#	BL_leakage_compensation_gated_10	NOR2
-* xNAND12_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10	BLB_leakage_compensation_gated_10#	NAND2
+* xNOR16_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10#	RWB#	BL_leakage_compensation_gated_10	NOR3
+* xNAND19_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10	RWB	BLB_leakage_compensation_gated_10#	NAND3
 * xNOT39_leak	VDD_nod	GND	BLB_leakage_compensation_gated_10#	BLB_leakage_compensation_gated_10	NOT
 * xNOT40_leak	VDD_nod	GND	LCP_11	LCP_11#	NOT
-* xNOR17_leak	VDD_nod	GND	BL_leakage_greater#	LCP_11#	BL_leakage_compensation_gated_11	NOR2
-* xNAND13_leak	VDD_nod	GND	BL_leakage_greater#	LCP_11	BLB_leakage_compensation_gated_11#	NAND2
+* xNOR17_leak	VDD_nod	GND	BL_leakage_greater#	LCP_11#	RWB#	BL_leakage_compensation_gated_11	NOR3
+* xNAND20_leak	VDD_nod	GND	BL_leakage_greater#	LCP_11	RWB	BLB_leakage_compensation_gated_11#	NAND3
 * xNOT41_leak	VDD_nod	GND	BLB_leakage_compensation_gated_11#	BLB_leakage_compensation_gated_11	NOT
 * xNOT42_leak	VDD_nod	GND	LCP_12	LCP_12#	NOT
-* xNOR18_leak	VDD_nod	GND	BL_leakage_greater#	LCP_12#	BL_leakage_compensation_gated_12	NOR2
-* xNAND14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_12	BLB_leakage_compensation_gated_12#	NAND2
+* xNOR18_leak	VDD_nod	GND	BL_leakage_greater#	LCP_12#	RWB#	BL_leakage_compensation_gated_12	NOR3
+* xNAND21_leak	VDD_nod	GND	BL_leakage_greater#	LCP_12	RWB	BLB_leakage_compensation_gated_12#	NAND3
 * xNOT43_leak	VDD_nod	GND	BLB_leakage_compensation_gated_12#	BLB_leakage_compensation_gated_12	NOT
 
 xNOT42_leak	VDD_nod	GND	LCP_excess_write	LCP_excess_write#	NOT
 xNOR19_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write#	BL_excess_write_leakage_gated	NOR2
-xNAND14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write	BLB_excess_write_leakage_gated#	NAND2
+xNAND22_leak	VDD_nod	GND	BL_leakage_greater#	LCP_excess_write	BLB_excess_write_leakage_gated#	NAND2
 xNOT43_leak	VDD_nod	GND	BLB_excess_write_leakage_gated#	BLB_excess_write_leakage_gated	NOT
 
 
@@ -879,10 +887,14 @@ x8_BLB_leakage	BLB	BL_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac tot
 * x12_BL_leakage	BL	BLB_leakage_compensation_gated_12		D_M12_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
 * x12_BLB_leakage	BLB	BL_leakage_compensation_gated_12		D_M12_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
 
-*x1_excess_write_leakage	CS_nod_excess_write		CS_nod_excess_write		GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-*x2_excess_write_leakage	D_M_excess_write_leakage		CS_nod_excess_write		GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-*x_BL_excess_write_leakage		BL	BLB_excess_write_leakage_gated		D_M_excess_write_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-*x_BLB_excess_write_leakage	BLB	BL_excess_write_leakage_gated		D_M_excess_write_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
+
+x1_BL_excess_write_leakage	CS_nod_excess_write_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
+x2_BL_excess_write_leakage	D_M_excess_write_leakage_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+x_BL_excess_write_leakage		BL	BLB_excess_write_leakage_gated		D_M_excess_write_leakage_BL	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+
+* x1_BLB_excess_write_leakage	CS_nod_excess_write_BLB		CS_nod_excess_write_BLB		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
+* x2_BLB_excess_write_leakage	D_M_excess_write_leakage_BLB		CS_nod_excess_write_BLB		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+* x_BLB_excess_write_leakage	BLB	BL_excess_write_leakage_gated		D_M_excess_write_leakage_BLB	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
 
 
 *Fcccs_BLB_leak_comp	CS_dummy_leak	GND		V_BL_leak	n_sink
@@ -898,10 +910,27 @@ x3_dummy_leak	out1_dummy_leak	out1_dummy_leak	GND	GND	nch_mac totalflag=total_fl
 * x5_dummy_leak	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x6_dummy_leak	CS_nod	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 
-*Fcccs_excess_write_leak	VDD_nod	CS_nod_excess_write		V_BL_leak	'2*nint-2'
-I_excess_write_leak	VDD_nod	CS_nod_excess_write		I_leak_excess_write_120_gauss
-*Fcccs_precision_leak	VDD_nod	CS_nod_excess_write		V_BL_leak	'0.5*n_sink'
-I_precision_leak	VDD_nod	CS_nod_excess_write		I_leak_precision_120_gauss
+*Fcccs_excess_write_leak	VDD_nod	CS_nod_excess_write_BL		V_BL_leak	'2*nint-2'
+I_excess_write_leak	VDD_nod	CS_nod_excess_write_BL		I_leak_excess_write_120_gauss
+*Fcccs_precision_leak	VDD_nod	CS_nod_excess_write_BL		V_BL_leak	'0.5*n_sink'
+*I_precision_leak	VDD_nod	CS_nod_excess_write_BL		I_leak_precision_120_gauss
+
+*Fcccs_excess_write_leak	VDD_nod	CS_nod_excess_write_BLB		V_BL_leak	'2*nint-2'
+*I_excess_write_leak	VDD_nod	CS_nod_excess_write_BLB		I_leak_excess_write_120_gauss
+*Fcccs_precision_leak	VDD_nod	CS_nod_excess_write_BLB		V_BL_leak	'0.5*n_sink'
+*I_precision_leak	VDD_nod	CS_nod_excess_write_BLB		I_leak_precision_120_gauss
+
+
+* I_leak_BL	VDD_nod		CS_node_leak_BL		dc		I_leak_BL_120_gauss
+* I_leak_BLB	VDD_nod		CS_node_leak_BLB	dc		I_leak_BLB_120_gauss
+* x1_leak_BL	CS_node_leak_BL_0v	CS_node_leak_BL_0v	GND	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='26*Wmin'	l='10*Lmin'
+* x2_leak_BL	BL_0v	CS_node_leak_BL_0v	GND	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+* x1_leak_BLB	CS_node_leak_BLB_0v	CS_node_leak_BLB_0v	GND	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='26*Wmin'	l='10*Lmin'
+* x2_leak_BLB	BLB_0v	CS_node_leak_BLB_0v	GND	GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='23*Wmin'	l='10*Lmin'
+* V_leak_BLB_0v 	BLB BLB_0v dc 0
+* V_CS_node_leak_BLB_0v CS_node_leak_BLB CS_node_leak_BLB_0v dc 0
+* V_leak_BL_0v 	BL BL_0v dc 0
+* V_CS_node_leak_BL_0v CS_node_leak_BL CS_node_leak_BL_0v dc 0
 
 **************************************	other elements
 
@@ -909,8 +938,8 @@ C1	BL	GND	C_BL
 C2	BLB	GND	C_BL
 *C3	WL	GND	C_WL
 
-C1_dummy	dummy_BL	GND	C_BL
-C2_dummy	dummy_BLB	GND	C_BL
+C1_dummy	dummy_BL	GND	'0.3*C_BL'
+C2_dummy	dummy_BLB	GND	'0.3*C_BL'
 
 C1_leak_dummy	leak_dummy_BL	GND		C_BL
 C2_leak_dummy	leak_dummy_BLB	GND		C_BL
