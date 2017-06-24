@@ -50,7 +50,7 @@
 .param T_simulation='(7+nref)*T_clk'
 .param step_simulation=T_clk/500
 .param T_sampling=0.9*T_simulation
-.param MC_num=50
+.param MC_num=150
 .param total_flag=0
 .param total_flag_NV=1				* total_flag nonvariation
 .param global_flag=1
@@ -115,23 +115,23 @@
 
 *************************************	subcircuits definition	********************************************
 .subckt	SRAM_6T	VDD GROND WL	BL	BLB
-x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'	*PG left
+x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG left
 x2	Q	QB	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU	left
 x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD left
 x4	QB	Q	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU right
 x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD right
-x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'	*PG rigth
+x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG rigth
 .ends
 
 *******************************************************************
 
 .subckt	SRAM_6T_NV	VDD GROND WL	BL	BLB
-x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'	*PG left
+x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG left
 x2	Q	QB	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU	left
 x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD left
 x4	QB	Q	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU right
 x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD right
-x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.15*Wmin'	l='Lmin'	*PG rigth
+x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG rigth
 .ends
 
 *******************************************************************
