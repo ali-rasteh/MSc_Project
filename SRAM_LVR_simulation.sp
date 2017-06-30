@@ -92,14 +92,14 @@
 .param I_leak_BL_120						='N0*I_leak_1cell_120'
 .param I_leak_BLB_120						='(nt-N0)*I_leak_1cell_120'
 
-.param I_leak_excess_write_double_120_gauss		=agauss(I_leak_excess_write_double_120,	'0.49*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BL_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'0.35*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BLB_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'0.35*0.05*nt*I_leak_1cell_120',	1)
-.param I_BLB_leak_comp_120_gauss				=agauss(I_BLB_leak_comp_120, 		'0.42*0.05*nt*I_leak_1cell_120',	1)
-.param I_dummy_leak_120_gauss					=agauss(I_dummy_leak_120, 			'1.00*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_precision_120_gauss				=agauss(I_leak_precision_120, 		'0.30*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BL_120_gauss						=agauss(I_leak_BL_120, 				'0.31*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BLB_120_gauss						=agauss(I_leak_BLB_120, 			'0.95*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_excess_write_double_120_gauss		=agauss(I_leak_excess_write_double_120,	'sqrt((2*nint-2)/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BL_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BLB_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_BLB_leak_comp_120_gauss				=agauss(I_BLB_leak_comp_120, 		'sqrt(n_sink/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_dummy_leak_120_gauss					=agauss(I_dummy_leak_120, 			'sqrt(nt/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_precision_120_gauss				=agauss(I_leak_precision_120, 		'sqrt((0.5*n_sink)/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BL_120_gauss						=agauss(I_leak_BL_120, 				'sqrt(N0/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_BLB_120_gauss						=agauss(I_leak_BLB_120, 			'sqrt((nt-N0)/nt)*0.05*nt*I_leak_1cell_120',	1)
 
 
 
@@ -630,6 +630,7 @@ xNAND1 VDD GROND	Q	OUT2	OUT	NAND2
 V_VDD VDD_nod GND dc VDD
 V_VDD_enhanced VDD_nod_enhanced GND dc VDD_enhanced
 V_VDD_nominal	VDD_nominal_nod	GND	dc VDD_nominal
+
 V_CLK CLK GND PULSE	0	VDD	'1*T_clk'		1p	1p	'0.5*T_clk'	'T_clk'
 V_CS CS GND PULSE	0	VDD	'0.025*T_clk'	1p	1p	'T_simulation'	'T_simulation+T_clk'
 *V_RWB RWB GND PULSE	VDD	0	'0.75*T_clk'	1p	1p	'T_clk'		'2*T_clk'
@@ -664,11 +665,11 @@ x2_main	BL	PCB#	VDD_nod VDD_nod	pch_mac totalflag=total_flag globalflag=global_f
 x4_main	BLB	PCB#	VDD_nod VDD_nod	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='Lmin'
 x5_main	BL	PCB#	BLB VDD_nod	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='Lmin'
 
-xTG1_BL_col_decoder	VDD	GND	BL	A1	BL_col_decoder1		TG
-xTG2_BL_col_decoder	VDD	GND	BL_col_decoder1	A0	BL_col_decoder2		TG
+xTG1_BL_col_decoder	VDD_nod	GND	BL	A1	BL_col_decoder1		TG
+xTG2_BL_col_decoder	VDD_nod	GND	BL_col_decoder1	A0	BL_col_decoder2		TG
 
-xTG1_BLB_col_decoder	VDD	GND	BLB	A1	BLB_col_decoder1	TG
-xTG2_BLB_col_decoder	VDD	GND	BLB_col_decoder1	A0	BLB_col_decoder2	TG
+xTG1_BLB_col_decoder	VDD_nod	GND	BLB	A1	BLB_col_decoder1	TG
+xTG2_BLB_col_decoder	VDD_nod	GND	BLB_col_decoder1	A0	BLB_col_decoder2	TG
 
 **************************************	dummy replica column
 
