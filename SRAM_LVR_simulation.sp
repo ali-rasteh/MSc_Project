@@ -20,7 +20,7 @@
 *.options NUMDGT=4     PIVOT=13
 .option runlvl=1
 .option	FAST
-.option	AUTOSTOP				* reduce simulation time by stopping your simulation as soon as the last measurement is completed by specifying the following option
+*.option	AUTOSTOP				* reduce simulation time by stopping your simulation as soon as the last measurement is completed by specifying the following option
 .option notop noelchk			* reduce simulation time by bypassing element checking and suppressing topology checking with the following options
 .option altcc altchk			* if using .ALTER statement, reduce netlist processing and checking time with the following options
 .option sim_la					*  for post-layout  netlists, use RC reductions techniques
@@ -40,74 +40,79 @@
 
 
 *************************************	parameters definition	********************************************
-.param VDD = 0.4
-.param VDD_enhanced = 0.65			* for VDD = 0.4
-*.param VDD_enhanced = 0.69			* for VDD = 0.45
+.param VDD = 0.45
+*.param VDD_enhanced = 0.65			* for VDD = 0.4
+.param VDD_enhanced = 0.68			* for VDD = 0.45
 .param VDD_nominal = 1.1
 .param Write_value = 0.0
 
-.param T_clk=500n
-.param T_simulation='(7+nref)*T_clk'
+.param T_clk=250n
+.param T_simulation='(7.5+nref)*T_clk'
 .param step_simulation=T_clk/500
-.param T_sampling=0.9*T_simulation
-.param MC_num=150
-.param total_flag=0
+.param T_sampling_normal='T_clk+170n'
+.param T_sampling_calib='((nref+3)*T_clk)+170n'
+
+.param MC_num=1
+.param total_flag=1
 .param total_flag_NV=1				* total_flag nonvariation
 .param global_flag=1
 .param mismatch_flag=1
 
 .param nt=1024
-.param nint=128
-.param nref=9
-.param n_compensation_max=1500
+.param nt_timing_dummy=580
+.param nt_dummy=950
+.param nint=140
+.param nref=10
+.param n_compensation_max=1400
 .param n_sink=n_compensation_max/(nref-1)
 
-.param N0=200
+.param N0=0
 .param nr=768
 
 
 *.param I_leak_1cell_27		=21p			* VDD = 1.1V
-*.param I_leak_1cell_120	=875p			* VDD = 1.1V
-*.param I_leak_1cell_120	=761p			* VDD = 1.0V
-*.param I_leak_1cell_120	=659p			* VDD = 0.9V
-*.param I_leak_1cell_120	=568p			* VDD = 0.8V
-*.param I_leak_1cell_120	=486p			* VDD = 0.7V
-*.param I_leak_1cell_120	=414p			* VDD = 0.6V
-*.param I_leak_1cell_120	=380p			* VDD = 0.55V
-*.param I_leak_1cell_120	=349p			* VDD = 0.5V
-*.param I_leak_1cell_120	=319p			* VDD = 0.45V
-.param I_leak_1cell_120	=291p			* VDD = 0.4V
-*.param I_leak_1cell_120	=264p			* VDD = 0.35V
-*.param I_leak_1cell_120	=238p			* VDD = 0.3V
-*.param I_leak_1cell_120	=213p			* VDD = 0.25V
-*.param I_leak_1cell_120	=187p			* VDD = 0.2V
+*.param I_leak_1cell_120	=559p			* VDD = 0.6V
+*.param I_leak_1cell_120	=514p			* VDD = 0.55V
+*.param I_leak_1cell_120	=472p			* VDD = 0.5V
+.param I_leak_1cell_120	=432p			* VDD = 0.45V
+*.param I_leak_1cell_120	=394p			* VDD = 0.4V
+*.param I_leak_1cell_120	=357p			* VDD = 0.35V
+*.param I_leak_1cell_120	=321p			* VDD = 0.3V
+*.param I_leak_1cell_120	=286p			* VDD = 0.25V
+*.param I_leak_1cell_120	=250p			* VDD = 0.2V
 
 
 
 .param I_leak_excess_write_double_120		='(2*nint-2)*I_leak_1cell_120'
 .param I_leak_excess_write_single_120		='(nint-1)*I_leak_1cell_120'
 .param I_BLB_leak_comp_120					='n_sink*I_leak_1cell_120'
-.param I_dummy_leak_120						='nt*I_leak_1cell_120'
+.param I_dummy_leak_120						='nt_dummy*I_leak_1cell_120'
 .param I_leak_precision_120					='0.5*n_sink*I_leak_1cell_120'
 .param I_leak_BL_120						='N0*I_leak_1cell_120'
 .param I_leak_BLB_120						='(nt-N0)*I_leak_1cell_120'
 
-.param I_leak_excess_write_double_120_gauss		=agauss(I_leak_excess_write_double_120,	'sqrt((2*nint-2)/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BL_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BLB_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_BLB_leak_comp_120_gauss				=agauss(I_BLB_leak_comp_120, 		'sqrt(n_sink/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_dummy_leak_120_gauss					=agauss(I_dummy_leak_120, 			'sqrt(nt/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_precision_120_gauss				=agauss(I_leak_precision_120, 		'sqrt((0.5*n_sink)/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BL_120_gauss						=agauss(I_leak_BL_120, 				'sqrt(N0/nt)*0.05*nt*I_leak_1cell_120',	1)
-.param I_leak_BLB_120_gauss						=agauss(I_leak_BLB_120, 			'sqrt((nt-N0)/nt)*0.05*nt*I_leak_1cell_120',	1)
+.param I_leak_excess_write_double_120_gauss		=agauss(I_leak_excess_write_double_120,	'(1-total_flag)*sqrt((2*nint-2)/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_leak_BL_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'(1-total_flag)*sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_leak_BLB_excess_write_single_120_gauss		=agauss(I_leak_excess_write_single_120,	'(1-total_flag)*sqrt((nint-1)/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_BLB_leak_comp_120_gauss				=agauss(I_BLB_leak_comp_120, 		'(1-total_flag)*sqrt(n_sink/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_dummy_leak_120_gauss					=agauss(I_dummy_leak_120, 			'(1-total_flag)*sqrt(nt_dummy/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_leak_precision_120_gauss				=agauss(I_leak_precision_120, 		'(1-total_flag)*sqrt((0.5*n_sink)/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_leak_BL_120_gauss						=agauss(I_leak_BL_120, 				'(1-total_flag)*sqrt(N0/nt)*0.05*nt*I_leak_1cell_120',	3)
+.param I_leak_BLB_120_gauss						=agauss(I_leak_BLB_120, 			'(1-total_flag)*sqrt((nt-N0)/nt)*0.05*nt*I_leak_1cell_120',	3)
+
 
 
 
 .param Lmin=40n
 .param Wmin=108n
 
-.param C_BL=920f
-.param C_WL=360f
+*.param C_BL=920f		*for 1024 cells in column
+*.param C_WL=360f		*for 1024 cells in row
+
+*.param C_BL_CELL=0.9f
+.param C_BL_CELL=0.6f
+*.param C_WL_CELL=0.35f
+.param C_WL_CELL=0.23f
 
 *************************************	temperature configurations	********************************************
 .temp 120
@@ -115,23 +120,23 @@
 
 *************************************	subcircuits definition	********************************************
 .subckt	SRAM_6T	VDD GROND WL	BL	BLB
-x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG left
+x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.4*Wmin'	l='Lmin'	*PG left
 x2	Q	QB	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU	left
-x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD left
+x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.4*Wmin'	l='Lmin'	*PD left
 x4	QB	Q	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU right
-x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD right
-x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG rigth
+x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='2.4*Wmin'	l='Lmin'	*PD right
+x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='1.4*Wmin'	l='Lmin'	*PG rigth
 .ends
 
 *******************************************************************
 
 .subckt	SRAM_6T_NV	VDD GROND WL	BL	BLB
-x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG left
+x1	BL	WL	Q	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.4*Wmin'	l='Lmin'	*PG left
 x2	Q	QB	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU	left
-x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD left
+x3	Q	QB	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.4*Wmin'	l='Lmin'	*PD left
 x4	QB	Q	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='Wmin'	l='Lmin'	*PU right
-x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.3*Wmin'	l='Lmin'	*PD right
-x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.6*Wmin'	l='Lmin'	*PG rigth
+x5	QB	Q	GROND	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='2.4*Wmin'	l='Lmin'	*PD right
+x6	BLB	WL	QB	GROND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='1.4*Wmin'	l='Lmin'	*PG rigth
 .ends
 
 *******************************************************************
@@ -241,8 +246,8 @@ x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag_NV globalflag=global_flag mismatc
 *******************************************************************
 
 .subckt NOT_large_size VDD GROND IN OUT
-x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='30*Wmin'	l='Lmin'	*NMOS
-x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='30*Wmin'	l='Lmin'		*PMOS
+x1	OUT	IN	GROND	GROND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'	*NMOS
+x2	OUT	IN	VDD	VDD	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='40*Wmin'	l='Lmin'		*PMOS
 .ends
 
 *******************************************************************
@@ -548,49 +553,49 @@ xNOR2 VDD GROND	NOR1_out	NAND1_out#	Q			NOR2
 xNOT_SET_1 VDD GROND	SET		SET#1	NOT_delay
 xNOT_SET_2 VDD GROND	SET#1	SET2	NOT_delay
 xNOT_SET_3 VDD GROND	SET2	SET#2	NOT_delay
-xNOT_SET_4 VDD GROND	SET#2	SET3	NOT
-xNOT_SET_5 VDD GROND	SET3	SET#3	NOT
-xNOT_SET_6 VDD GROND	SET#3	SET4	NOT
-xNOT_SET_7 VDD GROND	SET4	SET#4	NOT
-xNOT_SET_8 VDD GROND	SET#4	SET5	NOT
-xNOT_SET_9 VDD GROND	SET5	SET#5	NOT
-xNOT_SET_10 VDD GROND	SET#5	SET6	NOT
-xNOT_SET_11 VDD GROND	SET6	SET#6	NOT
-xNOT_SET_12 VDD GROND	SET#6	SET7	NOT
-xNOT_SET_13 VDD GROND	SET7	SET#7	NOT
-xNOT_SET_14 VDD GROND	SET#7	SET8	NOT
-xNOT_SET_15 VDD GROND	SET8	SET#8	NOT
-xNOT_SET_16 VDD GROND	SET#8	SET9	NOT
-xNOT_SET_17 VDD GROND	SET9	SET#9	NOT
-xNOT_SET_18 VDD GROND	SET#9	SET10	NOT
-xNOT_SET_19 VDD GROND	SET10	SET#10	NOT
-xNOT_SET_20 VDD GROND	SET#10	SET11	NOT
-xNOT_SET_21 VDD GROND	SET11	SET#11	NOT
+xNOT_SET_4 VDD GROND	SET#2	SET3	NOT_delay
+xNOT_SET_5 VDD GROND	SET3	SET#3	NOT_delay
+* xNOT_SET_6 VDD GROND	SET#3	SET4	NOT
+* xNOT_SET_7 VDD GROND	SET4	SET#4	NOT
+* xNOT_SET_8 VDD GROND	SET#4	SET5	NOT
+* xNOT_SET_9 VDD GROND	SET5	SET#5	NOT
+* xNOT_SET_10 VDD GROND	SET#5	SET6	NOT
+* xNOT_SET_11 VDD GROND	SET6	SET#6	NOT
+* xNOT_SET_12 VDD GROND	SET#6	SET7	NOT
+* xNOT_SET_13 VDD GROND	SET7	SET#7	NOT
+* xNOT_SET_14 VDD GROND	SET#7	SET8	NOT
+* xNOT_SET_15 VDD GROND	SET8	SET#8	NOT
+* xNOT_SET_16 VDD GROND	SET#8	SET9	NOT
+* xNOT_SET_17 VDD GROND	SET9	SET#9	NOT
+* xNOT_SET_18 VDD GROND	SET#9	SET10	NOT
+* xNOT_SET_19 VDD GROND	SET10	SET#10	NOT
+* xNOT_SET_20 VDD GROND	SET#10	SET11	NOT
+* xNOT_SET_21 VDD GROND	SET11	SET#11	NOT
 
-xNOT_RESET_1  VDD GROND	RESET		RESET#1	NOT
+xNOT_RESET_1  VDD GROND	RESET		RESET#1	NOT_delay
 xNOT_RESET_2  VDD GROND	RESET#1	RESET2	NOT_delay
 xNOT_RESET_3  VDD GROND	RESET2	RESET#2	NOT_delay
 xNOT_RESET_4  VDD GROND	RESET#2	RESET3	NOT_delay
-xNOT_RESET_5  VDD GROND	RESET3	RESET#3	NOT
-xNOT_RESET_6  VDD GROND	RESET#3	RESET4	NOT
-xNOT_RESET_7  VDD GROND	RESET4	RESET#4	NOT
-xNOT_RESET_8  VDD GROND	RESET#4	RESET5	NOT
-xNOT_RESET_9  VDD GROND	RESET5	RESET#5	NOT
-xNOT_RESET_10 VDD GROND	RESET#5	RESET6	NOT
-xNOT_RESET_11 VDD GROND	RESET6	RESET#6	NOT
-xNOT_RESET_12 VDD GROND	RESET#6	RESET7	NOT
-xNOT_RESET_13 VDD GROND	RESET7	RESET#7	NOT
-xNOT_RESET_14 VDD GROND	RESET#7	RESET8	NOT
-xNOT_RESET_15 VDD GROND	RESET8	RESET#8	NOT
-xNOT_RESET_16 VDD GROND	RESET#8	RESET9	NOT
-xNOT_RESET_17 VDD GROND	RESET9	RESET#9	NOT
-xNOT_RESET_18 VDD GROND	RESET#9	RESET10	NOT
-xNOT_RESET_19 VDD GROND	RESET10	RESET#10	NOT
-xNOT_RESET_20 VDD GROND	RESET#10	RESET11	NOT
-xNOT_RESET_21 VDD GROND	RESET11	RESET#11	NOT
+xNOT_RESET_5  VDD GROND	RESET3	RESET#3	NOT_delay
+* xNOT_RESET_6  VDD GROND	RESET#3	RESET4	NOT
+* xNOT_RESET_7  VDD GROND	RESET4	RESET#4	NOT
+* xNOT_RESET_8  VDD GROND	RESET#4	RESET5	NOT
+* xNOT_RESET_9  VDD GROND	RESET5	RESET#5	NOT
+* xNOT_RESET_10 VDD GROND	RESET#5	RESET6	NOT
+* xNOT_RESET_11 VDD GROND	RESET6	RESET#6	NOT
+* xNOT_RESET_12 VDD GROND	RESET#6	RESET7	NOT
+* xNOT_RESET_13 VDD GROND	RESET7	RESET#7	NOT
+* xNOT_RESET_14 VDD GROND	RESET#7	RESET8	NOT
+* xNOT_RESET_15 VDD GROND	RESET8	RESET#8	NOT
+* xNOT_RESET_16 VDD GROND	RESET#8	RESET9	NOT
+* xNOT_RESET_17 VDD GROND	RESET9	RESET#9	NOT
+* xNOT_RESET_18 VDD GROND	RESET#9	RESET10	NOT
+* xNOT_RESET_19 VDD GROND	RESET10	RESET#10	NOT
+* xNOT_RESET_20 VDD GROND	RESET#10	RESET11	NOT
+* xNOT_RESET_21 VDD GROND	RESET11	RESET#11	NOT
 
-xNOR3 VDD GROND	SET	SET#7	NOR3_out	NOR2
-xNAND1 VDD GROND	RESET	RESET#11	NAND1_out	NAND2
+xNOR3 VDD GROND	SET	SET#3	NOR3_out	NOR2
+xNAND1 VDD GROND	RESET	RESET#3	NAND1_out	NAND2
 xNOT35 VDD GROND	NAND1_out	NAND1_out#	NOT
 
 .ends
@@ -712,7 +717,10 @@ x2_row_decoder_timing	d2_row_decoder	A2	VDD_nod		VDD_nod	pch_mac totalflag=total
 xNAND1_timing	VDD_nod	GND	d1_row_decoder	d2_row_decoder	row_address_enable	NAND2
 *xNOR6_timing	VDD_nod	GND	dummy_WL#	LCP_1	LCP_2	LCP_3	row_address_enable	WL	NOR5
 xNOR6_timing	VDD_nod	GND	dummy_WL#	LCA		row_address_enable	WL	NOR3
-xNOT12_timing	VDD_nod	GND	dummy_WL	dummy_WL#	NOT
+*xNOR6_timing	VDD_nod	GND	dummy_WL#	LCA		row_address_enable	WL1	NOR3
+*xNOT12_timing	VDD_nod	GND	WL1	WL#	NOT
+*xNOT13_timing	VDD_nod	GND	WL#	WL	NOT_large_size
+xNOT14_timing	VDD_nod	GND	dummy_WL	dummy_WL#	NOT
 
 **************************************	leakage compensation circuit
 
@@ -749,7 +757,7 @@ xFE_RER_DFF6_leak		VDD_nod	GND	LCP_4	START_LCA	LCA_GR			LCP_5	not_connect6_leak	
 xFE_RER_DFF7_leak		VDD_nod	GND	LCP_5	START_LCA	LCA_GR			LCP_6	not_connect7_leak	FE_RER_DFF_3
 xFE_RER_DFF8_leak		VDD_nod	GND	LCP_6	START_LCA	LCA_GR			LCP_7	not_connect8_leak	FE_RER_DFF_3
 xFE_RER_DFF9_leak		VDD_nod	GND	LCP_7	START_LCA	LCA_GR			LCP_8	not_connect9_leak	FE_RER_DFF_3
-* xFE_RER_DFF10_leak	VDD_nod	GND	LCP_8	START_LCA	LCA_GR			LCP_9	not_connect10_leak	FE_RER_DFF_3
+xFE_RER_DFF10_leak		VDD_nod	GND	LCP_8	START_LCA	LCA_GR			LCP_9	not_connect10_leak	FE_RER_DFF_3
 * xFE_RER_DFF11_leak	VDD_nod	GND	LCP_9	START_LCA	LCA_GR			LCP_10	not_connect11_leak	FE_RER_DFF_3
 * xFE_RER_DFF12_leak	VDD_nod	GND	LCP_10	START_LCA	LCA_GR			LCP_11	not_connect12_leak	FE_RER_DFF_3
 * xFE_RER_DFF13_leak	VDD_nod	GND	LCP_11	START_LCA	LCA_GR			LCP_12	not_connect13_leak	FE_RER_DFF_3
@@ -777,7 +785,7 @@ xRE_DFF2_leak	VDD_nod GND	output	current_compare_CLK		GND	current_compare_output
 xXOR1_leak	VDD_nod	GND	current_compare_output	BL_leakage_greater#	LCR	XOR2
 xNAND4_leak	VDD_nod	GND	LCR	LCP_1	LCR_gated#	NAND2
 xNOT13_leak	VDD_nod	GND	LCR_gated#	LCR_gated	NOT
-xNOR6_leak	VDD_nod	GND	LCR_gated	LCP_8	LCP_RESET#	NOR2
+xNOR6_leak	VDD_nod	GND	LCR_gated	LCP_9	LCP_RESET#	NOR2
 xNOT14_leak	VDD_nod	GND	LCP_RESET#	LCP_RESET	NOT
 
 
@@ -814,10 +822,10 @@ xNOT34_leak	VDD_nod	GND	LCP_8	LCP_8#	NOT
 xNOR14_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8#	RWB#	BL_leakage_compensation_gated_8	NOR3
 xNAND17_leak	VDD_nod	GND	BL_leakage_greater#	LCP_8	RWB	BLB_leakage_compensation_gated_8#	NAND3
 xNOT35_leak	VDD_nod	GND	BLB_leakage_compensation_gated_8#	BLB_leakage_compensation_gated_8	NOT
-* xNOT36_leak	VDD_nod	GND	LCP_9	LCP_9#	NOT
-* xNOR15_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9#	RWB#	BL_leakage_compensation_gated_9	NOR3
-* xNAND18_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9	RWB	BLB_leakage_compensation_gated_9#	NAND3
-* xNOT37_leak	VDD_nod	GND	BLB_leakage_compensation_gated_9#	BLB_leakage_compensation_gated_9	NOT
+xNOT36_leak	VDD_nod	GND	LCP_9	LCP_9#	NOT
+xNOR15_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9#	RWB#	BL_leakage_compensation_gated_9	NOR3
+xNAND18_leak	VDD_nod	GND	BL_leakage_greater#	LCP_9	RWB	BLB_leakage_compensation_gated_9#	NAND3
+xNOT37_leak	VDD_nod	GND	BLB_leakage_compensation_gated_9#	BLB_leakage_compensation_gated_9	NOT
 * xNOT38_leak	VDD_nod	GND	LCP_10	LCP_10#	NOT
 * xNOR16_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10#	RWB#	BL_leakage_compensation_gated_10	NOR3
 * xNAND19_leak	VDD_nod	GND	BL_leakage_greater#	LCP_10	RWB	BLB_leakage_compensation_gated_10#	NAND3
@@ -840,60 +848,50 @@ xNOT35_leak	VDD_nod	GND	BLB_leakage_compensation_gated_8#	BLB_leakage_compensati
 * x1_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x1_leakage_2	D_M1_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x1_leakage_2	D_M1_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-V_D_M1_leakage_0v	D_M1_leakage 	D_M1_leakage_0v dc 0
-x1_BL_leakage	BL	BLB_leakage_compensation_gated_1		D_M1_leakage_0v	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x1_BLB_leakage	BLB	BL_leakage_compensation_gated_1		D_M1_leakage_0v	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+V_D_M1_leakage_0v	D_M1_leakage_0v		D_M1_leakage dc 0
+x1_BL_leakage	BL	BLB_leakage_compensation_gated_1		D_M1_leakage_0v	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x1_BLB_leakage	BLB	BL_leakage_compensation_gated_1		D_M1_leakage_0v	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x2_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x2_leakage_2	D_M2_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x2_leakage_2	D_M2_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x2_BL_leakage	BL	BLB_leakage_compensation_gated_2		D_M2_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x2_BLB_leakage	BLB	BL_leakage_compensation_gated_2		D_M2_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x2_BL_leakage	BL	BLB_leakage_compensation_gated_2		D_M2_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x2_BLB_leakage	BLB	BL_leakage_compensation_gated_2		D_M2_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x3_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x3_leakage_2	D_M3_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x3_leakage_2	D_M3_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x3_BL_leakage	BL	BLB_leakage_compensation_gated_3		D_M3_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x3_BLB_leakage	BLB	BL_leakage_compensation_gated_3		D_M3_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x3_BL_leakage	BL	BLB_leakage_compensation_gated_3		D_M3_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x3_BLB_leakage	BLB	BL_leakage_compensation_gated_3		D_M3_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x4_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x4_leakage_2	D_M4_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x4_leakage_2	D_M4_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x4_BL_leakage	BL	BLB_leakage_compensation_gated_4		D_M4_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x4_BLB_leakage	BLB	BL_leakage_compensation_gated_4		D_M4_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x4_BL_leakage	BL	BLB_leakage_compensation_gated_4		D_M4_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x4_BLB_leakage	BLB	BL_leakage_compensation_gated_4		D_M4_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x5_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x5_leakage_2	D_M5_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x5_leakage_2	D_M5_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x5_BL_leakage	BL	BLB_leakage_compensation_gated_5		D_M5_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x5_BLB_leakage	BLB	BL_leakage_compensation_gated_5		D_M5_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x5_BL_leakage	BL	BLB_leakage_compensation_gated_5		D_M5_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x5_BLB_leakage	BLB	BL_leakage_compensation_gated_5		D_M5_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x6_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x6_leakage_2	D_M6_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x6_leakage_2	D_M6_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x6_BL_leakage	BL	BLB_leakage_compensation_gated_6		D_M6_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x6_BLB_leakage	BLB	BL_leakage_compensation_gated_6		D_M6_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x6_BL_leakage	BL	BLB_leakage_compensation_gated_6		D_M6_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x6_BLB_leakage	BLB	BL_leakage_compensation_gated_6		D_M6_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x7_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x7_leakage_2	D_M7_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x7_leakage_2	D_M7_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x7_BL_leakage	BL	BLB_leakage_compensation_gated_7		D_M7_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x7_BLB_leakage	BLB	BL_leakage_compensation_gated_7		D_M7_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x7_BL_leakage	BL	BLB_leakage_compensation_gated_7		D_M7_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x7_BLB_leakage	BLB	BL_leakage_compensation_gated_7		D_M7_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x8_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x8_leakage_2	D_M8_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 x8_leakage_2	D_M8_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-x8_BL_leakage	BL	BLB_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-x8_BLB_leakage	BLB	BL_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x8_BL_leakage	BL	BLB_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x8_BLB_leakage	BLB	BL_leakage_compensation_gated_8		D_M8_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
 * x9_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x9_leakage_2	D_M9_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x9_BL_leakage	BL	BLB_leakage_compensation_gated_9		D_M9_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x9_BLB_leakage	BLB	BL_leakage_compensation_gated_9		D_M9_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x10_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x10_leakage_2	D_M10_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x10_BL_leakage	BL	BLB_leakage_compensation_gated_10		D_M10_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x10_BLB_leakage	BLB	BL_leakage_compensation_gated_10		D_M10_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x11_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x11_leakage_2	D_M11_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x11_BL_leakage	BL	BLB_leakage_compensation_gated_11		D_M11_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x11_BLB_leakage	BLB	BL_leakage_compensation_gated_11		D_M11_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x12_leakage_1	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x12_leakage_2	D_M12_leakage	out1_dummy_leak	G_M4_dummy_leak	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
-* x12_BL_leakage	BL	BLB_leakage_compensation_gated_12		D_M12_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
-* x12_BLB_leakage	BLB	BL_leakage_compensation_gated_12		D_M12_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='20*Wmin'	l='2*Lmin'
+x9_leakage_2	D_M9_leakage	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
+x9_BL_leakage	BL	BLB_leakage_compensation_gated_9		D_M9_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+x9_BLB_leakage	BLB	BL_leakage_compensation_gated_9		D_M9_leakage	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='2*Lmin'
+
 
 
 * x1_BL_excess_write_leakage	CS_nod_excess_write_BL		CS_nod_excess_write_BL		GND		GND	nch_mac totalflag=total_flag_NV globalflag=global_flag mismatchflag=mismatch_flag	w='28*Wmin'	l='10*Lmin'
@@ -911,10 +909,9 @@ I_leak_comp				CS_dummy_leak_0v 	GND		I_dummy_leak_120_gauss
 V_leak_comp_0v CS_dummy_leak CS_dummy_leak_0v dc 0
 *I_leak_comp			CS_dummy_leak 	GND		0
 
-x1_dummy_leak	CS_dummy_leak	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='100*Wmin'	l='10*Lmin'
-* x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='17*Wmin'	l='10*Lmin'
-x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='14*Wmin'	l='10*Lmin'
-V_dummy_leak_0v out1_dummy_leak out1_dummy_leak_0v dc 0
+x1_dummy_leak	CS_dummy_leak	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='200*Wmin'	l='20*Lmin'
+x2_dummy_leak	out1_dummy_leak_0v	CS_dummy_leak	VDD_nod_enhanced		VDD_nod_enhanced	pch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='28.5*Wmin'	l='20*Lmin'
+V_dummy_leak_0v out1_dummy_leak_0v	out1_dummy_leak dc 0
 x3_dummy_leak	out1_dummy_leak	out1_dummy_leak	GND	GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x4_dummy_leak	D_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
 * x5_dummy_leak	G_M4_dummy_leak	G_M4_dummy_leak	GND		GND	nch_mac totalflag=total_flag globalflag=global_flag mismatchflag=mismatch_flag	w='10*Wmin'	l='10*Lmin'
@@ -944,15 +941,15 @@ x3_dummy_leak	out1_dummy_leak	out1_dummy_leak	GND	GND	nch_mac totalflag=total_fl
 
 **************************************	other elements
 
-C1	BL	GND	C_BL
-C2	BLB	GND	C_BL
-*C3	WL	GND	C_WL
+C1	BL	GND	'nt*C_BL_CELL'
+C2	BLB	GND	'nt*C_BL_CELL'
+*C3	WL	GND	'nt*C_WL_CELL'
 
-C1_dummy	dummy_BL	GND	'0.3*C_BL'
-C2_dummy	dummy_BLB	GND	'0.3*C_BL'
+C1_dummy	dummy_BL	GND	'nt_timing_dummy*C_BL_CELL'
+C2_dummy	dummy_BLB	GND	'nt_timing_dummy*C_BL_CELL'
 
-C1_leak_dummy	leak_dummy_BL	GND		C_BL
-C2_leak_dummy	leak_dummy_BLB	GND		C_BL
+C1_leak_dummy	leak_dummy_BL	GND		'nt_dummy*C_BL_CELL'
+C2_leak_dummy	leak_dummy_BLB	GND		'nt_dummy*C_BL_CELL'
 
 * I_leak_BL		BL		GND	dc			I_leak_BL_120_gauss
 * I_leak_BLB	BLB		GND	dc			I_leak_BLB_120_gauss
@@ -978,9 +975,11 @@ I_leak_BLB	BLB	GND	PULSE	I_leak_BLB_120_gauss	'I_leak_BLB_120_gauss-I_leak_BLB_e
 *.MEAS TRAN output_max MAX V(output,GND) FROM=70ns TO=85ns
 *.MEAS TRAN BL_leakage_compensation_gated FIND V(BL_leakage_compensation_gated) AT=T_sampling
 *.MEAS TRAN BLB_leakage_compensation_gated FIND V(BLB_leakage_compensation_gated) AT=T_sampling
+.MEAS TRAN BL_BLB_Diff_normal FIND V(BL,BLB) AT=T_sampling_normal
+*.MEAS TRAN BL_BLB_Diff_calib FIND V(BL,BLB) AT=T_sampling_calib
 *.MEAS TRAN difference_max MAX V(BL,BLB) FROM=40ns TO=41ns
 *.MEAS TRAN difference_min MIN V(BL,BLB) FROM=40ns TO=41ns
-.op
+*.op
 .IC	V(XSRAM1_main.Q) 0 V(XSRAM1_main.QB) VDD	V(XSRAM1_dummy.Q) 0	V(XSRAM1_dummy.QB) VDD	V(XSRAM1_leak.Q)	0	V(XSRAM1_leak.QB)	VDD
 + V(BL)	VDD	V(BLB)	VDD	
 + V(START)	VDD		V(START_LCA)	VDD		V(RESET)	0	V(dummy_WL)	0	V(WE)	VDD		V(SE)	VDD
@@ -993,9 +992,6 @@ I_leak_BLB	BLB	GND	PULSE	I_leak_BLB_120_gauss	'I_leak_BLB_120_gauss-I_leak_BLB_e
 + V(BL_leakage_compensation_gated_7)	0	V(BLB_leakage_compensation_gated_7)	0
 + V(BL_leakage_compensation_gated_8)	0	V(BLB_leakage_compensation_gated_8)	0
 + V(BL_leakage_compensation_gated_9)	0	V(BLB_leakage_compensation_gated_9)	0
-+ V(BL_leakage_compensation_gated_10)	0	V(BLB_leakage_compensation_gated_10)	0
-+ V(BL_leakage_compensation_gated_11)	0	V(BLB_leakage_compensation_gated_11)	0
-+ V(BL_leakage_compensation_gated_12)	0	V(BLB_leakage_compensation_gated_12)	0
 + V(write_counter1)	VDD	V(write_counter2#_NC)	VDD	V(write_counter2)	0	V(write_counter3#_NC)	VDD	V(write_counter3)	0
 + V(write_counter4#_NC)	VDD	V(write_counter4)	0	*	V(write_counter5#)	VDD	V(write_counter5)	0
 + V(PRE_LCA)	VDD		V(LCA)	0	V(LCP_1)	0	V(LCP_2)	0	V(LCP_3)	0	V(LCP_4)	0	V(LCP_5)	0	V(LCP_6)	0
